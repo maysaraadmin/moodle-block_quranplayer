@@ -18,7 +18,7 @@
  * Fetches Quran text for a given chapter.
  *
  * @package    block_quranplayer
- * @copyright  2024 Maysara Mohamed 
+ * @copyright  2024 Maysara Mohamed
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,7 +27,13 @@ require_login();
 
 defined('MOODLE_INTERNAL') || die();
 
-$file = optional_param('file', '', PARAM_TEXT);
+$file = optional_param('file', '', PARAM_INT);
+
+if (empty($file) || $file < 1 || $file > 114) {
+    echo get_string('noqurantext', 'block_quranplayer');
+    exit;
+}
+
 $quranfile = __DIR__ . '/quran.txt';
 
 if (!file_exists($quranfile)) {
@@ -35,17 +41,13 @@ if (!file_exists($quranfile)) {
     exit;
 }
 
-// Extract surah number from the file name.
-$surahnumber = intval(pathinfo($file, PATHINFO_FILENAME));
-
 $qurantext = file_get_contents($quranfile);
 $lines = explode("\n", $qurantext);
 
 $selectedtext = '';
 foreach ($lines as $line) {
-    // Each line is in the format "surah|verse|text".
     list($linesurah, $lineverse, $text) = explode('|', $line, 3);
-    if ($linesurah == $surahnumber) {
+    if ($linesurah == $file) {
         $selectedtext .= "$lineverse. $text\n";
     }
 }

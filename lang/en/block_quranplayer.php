@@ -18,7 +18,7 @@
  * Language strings for the Quran Player block.
  *
  * @package    block_quranplayer
- * @copyright  2024 Maysara Mohamed 
+ * @copyright  2024 Maysara Mohamed
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,3 +33,5 @@ $string['qurantext'] = 'Quran Text';
 $string['noaudiofiles'] = 'No audio files found.';
 $string['nodirectory'] = 'MP3 directory not found.';
 $string['noqurantext'] = 'Quran text file not found.';
+$string['loading'] = 'Loading Quran text...';
+$string['errorloading'] = 'Failed to load Quran text.';

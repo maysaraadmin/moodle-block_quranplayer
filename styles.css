@@ -49,3 +49,13 @@
     border-color: #ffeeba;
     color: #856404;
 }
+
+@media (max-width: 768px) {
+    #quranplayer-select {
+        font-size: 14px;
+    }
+
+    #quran-text pre {
+        font-size: 16px;
+    }
+}

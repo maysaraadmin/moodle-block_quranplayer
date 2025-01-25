@@ -18,7 +18,7 @@
  * Capability definitions for the Quran Player block.
  *
  * @package    block_quranplayer
- * @copyright  2024 Maysara Mohamed 
+ * @copyright  2024 Maysara Mohamed
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -39,6 +39,14 @@ $capabilities = [
         'archetypes' => [
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
+        ],
+    ],
+    'block/quranplayer:view' => [
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => [
+            'user' => CAP_ALLOW,
+            'guest' => CAP_ALLOW,
         ],
     ],
 ];
