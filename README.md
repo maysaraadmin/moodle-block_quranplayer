@@ -1,4 +1,3 @@
-
 # Quran Player Moodle Block Plugin 🎧🕌
 
 The **Quran Player Block Plugin** is a Moodle block designed to enhance the learning experience by integrating an audio player for Quran chapters directly into Moodle courses. This plugin allows users to play Quran audio files and display the corresponding Quran text alongside the audio.
@@ -23,7 +22,7 @@ The **Quran Player Block Plugin** is a Moodle block designed to enhance the lear
 1. **Download the Plugin**:
    - Clone this repository or download the ZIP file.
    ```bash
-   git clone https://github.com/maysaraadmin/quranplayer.git
+   git clone https://github.com/maysaraadmin/moodle-block_quranplayer.git
    ```
 
 2. **Install the Plugin**:
@@ -75,14 +74,6 @@ The **Quran Player Block Plugin** is a Moodle block designed to enhance the lear
    - You can customize the appearance of the player by editing the `styles.css` file in the plugin directory.
 
 ---
-
-## Screenshots 📸
-
-![Quran Player Block](screenshots/quranplayer.png)
-*The Quran Player Block in action, displaying the Quran text and audio player.*
-
----
-
 ## Contributing 🤝
 
 We welcome contributions from the community! Whether you're a developer, tester, or documentation enthusiast, your help is appreciated.
@@ -93,7 +84,7 @@ We welcome contributions from the community! Whether you're a developer, tester,
 
 2. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/quranplayer.git
+   git clone https://github.com/maysaraadmin/moodle-block_quranplayer.git
    ```
 
 3. **Create a Branch**:
@@ -124,7 +115,7 @@ This plugin is released under the **GNU General Public License v3.0**. See the [
 ## Support and Feedback 💬
 
 If you encounter any issues or have suggestions for improvement, please:
-- Open an issue on [GitHub](https://github.com/maysaraadmin/quranplayer/issues).
+- Open an issue on [GitHub](https://github.com/maysaraadmin/moodle-block_quranplayer/issues).
 - Reach out to me via email or LinkedIn.
 
 Let’s make this plugin even better together! 🌟
@@ -138,5 +129,4 @@ Let’s make this plugin even better together! 🌟
 
 ---
 
-🔗 **GitHub Repository**: [https://github.com/maysaraadmin/quranplayer](https://github.com/maysaraadmin/quranplayer)
-
+🔗 **GitHub Repository**: [https://github.com/maysaraadmin/moodle-block_quranplayer](https://github.com/maysaraadmin/moodle-block_quranplayer)
