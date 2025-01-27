@@ -35,3 +35,4 @@ $string['nodirectory'] = 'MP3 directory not found.';
 $string['noqurantext'] = 'Quran text file not found.';
 $string['loading'] = 'Loading Quran text...';
 $string['errorloading'] = 'Failed to load Quran text.';
+$string['privacy:metadata'] = 'The Quran Player block does not store any personal data. It only provides an interface to play Quranic audio and display Quranic text.';
