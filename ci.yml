@@ -1,0 +1,41 @@
+name: Moodle Plugin CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: mbstring, xml, curl, zip, intl, json, gd, pdo_mysql, mysqli, soap, iconv
+          coverage: none
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: |
+          composer install --prefer-dist --no-progress --no-suggest
+          npm install
+
+      - name: Run Moodle Plugin CI
+        uses: moodlehq/moodle-plugin-ci@master
+        with:
+          repo: ${{ github.repository }}
+          plugin: block_quranplayer
+          moodle-branch: MOODLE_311_STABLE
