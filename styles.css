@@ -1,10 +1,10 @@
 /* Quran Player block styles */
-#quranplayer {
+.path-block-quranplayer #quranplayer {
     width: 100%;
     margin-top: 10px;
 }
 
-#quranplayer-select {
+.path-block-quranplayer #quranplayer-select {
     width: 100%;
     margin-bottom: 10px;
     padding: 8px;
@@ -14,7 +14,7 @@
     font-size: 16px;
 }
 
-#quran-text {
+.path-block-quranplayer #quran-text {
     margin-top: 20px;
     padding: 15px;
     background-color: #f9f9f9;
@@ -22,7 +22,7 @@
     border-radius: 4px;
 }
 
-#quran-text pre {
+.path-block-quranplayer #quran-text pre {
     white-space: pre-wrap;
     word-wrap: break-word;
     font-family: 'Amiri', serif;
@@ -32,30 +32,30 @@
     color: #333;
 }
 
-.alert {
+.path-block-quranplayer .alert {
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 4px;
 }
 
-.alert-error {
+.path-block-quranplayer .alert-error {
     background-color: #f8d7da;
     border-color: #f5c6cb;
     color: #721c24;
 }
 
-.alert-warning {
+.path-block-quranplayer .alert-warning {
     background-color: #fff3cd;
     border-color: #ffeeba;
     color: #856404;
 }
 
 @media (max-width: 768px) {
-    #quranplayer-select {
+    .path-block-quranplayer #quranplayer-select {
         font-size: 14px;
     }
 
-    #quran-text pre {
+    .path-block-quranplayer #quran-text pre {
         font-size: 16px;
     }
 }
