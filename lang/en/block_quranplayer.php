@@ -18,7 +18,7 @@
  * Language strings for the Quran Player block.
  *
  * @package    block_quranplayer
- * @copyright  2024 Maysara Mohamed
+ * @copyright  2025 Maysara Mohamed
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

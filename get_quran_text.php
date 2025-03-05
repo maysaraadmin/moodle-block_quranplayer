@@ -18,7 +18,7 @@
  * Fetches Quran text for a given chapter.
  *
  * @package    block_quranplayer
- * @copyright  2024 Maysara Mohamed
+ * @copyright  2025 Maysara Mohamed
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
