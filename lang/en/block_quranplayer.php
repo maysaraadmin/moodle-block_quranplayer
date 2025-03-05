@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Quran Player';
 $string['quranplayer'] = 'Quran Player';
+$string['privacy:metadata'] = 'The Quran Player block does not store any personal data.';
 $string['quranplayer:addinstance'] = 'Add a new Quran Player block';
 $string['quranplayer:myaddinstance'] = 'Add a new Quran Player block to My Moodle';
 $string['selectfile'] = 'Select a chapter to play:';
