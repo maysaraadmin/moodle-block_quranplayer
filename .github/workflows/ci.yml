@@ -37,7 +37,7 @@ jobs:
           npm install
 
       - name: Run Moodle Plugin CI
-        uses: moodlehq/moodle-plugin-ci@master
+        uses: moodlehq/moodle-plugin-ci@v4  # Use a specific version instead of master
         with:
           repo: ${{ github.repository }}
           plugin: block_quranplayer

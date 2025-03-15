@@ -49,7 +49,7 @@ class block_quranplayer extends block_base {
     }
 
     private function render_audio_player() {
-        global $CFG;
+        global $CFG, $USER;
 
         $quranchapters = [
             "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
@@ -118,13 +118,19 @@ class block_quranplayer extends block_base {
 
         quranContent.textContent = '{$this->get_loading_message()}';
 
-        fetch('{$CFG->wwwroot}/blocks/quranplayer/get_quran_text.php?file=' + selectedSurah)
-            .then(response => response.text())
+        fetch('{$CFG->wwwroot}/blocks/quranplayer/get_quran_text.php?file=' + selectedSurah + '&sesskey=' + '{$USER->sesskey}')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
             .then(text => {
                 quranContent.textContent = text;
             })
             .catch(error => {
                 quranContent.textContent = '{$this->get_error_message()}';
+                console.error('Error fetching Quran text:', error);
             });
     });
 

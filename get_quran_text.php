@@ -28,6 +28,12 @@ require_login();
 defined('MOODLE_INTERNAL') || die();
 
 $file = optional_param('file', '', PARAM_INT);
+$sesskey = optional_param('sesskey', '', PARAM_TEXT);
+
+if (!confirm_sesskey($sesskey)) {
+    echo get_string('noqurantext', 'block_quranplayer');
+    exit;
+}
 
 if (empty($file) || $file < 1 || $file > 114) {
     echo get_string('noqurantext', 'block_quranplayer');
