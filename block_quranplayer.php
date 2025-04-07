@@ -62,4 +62,8 @@ class block_quranplayer extends block_base {
         }
         return $result;
     }
+
+    public function has_config() {
+        return true;
+    }
 }

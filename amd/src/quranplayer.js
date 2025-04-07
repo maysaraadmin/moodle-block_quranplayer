@@ -15,6 +15,9 @@ define(['jquery', 'core/ajax', 'core/str'], function($, ajax, str) {
                 // Set loading message
                 str.get_string('loading', 'block_quranplayer').then(function(loadingMsg) {
                     quranContent.text(loadingMsg);
+                    return;
+                }).catch(function() {
+                    quranContent.text('Loading...');
                 });
 
                 // Load audio
@@ -43,12 +46,16 @@ define(['jquery', 'core/ajax', 'core/str'], function($, ajax, str) {
                     str.get_string('errorloading', 'block_quranplayer')
                         .then(function(msg) {
                             quranContent.text(msg);
-                            audioError.text(msg).show();
+                            audioError.text(error.message || msg).show();
+                        })
+                        .catch(function() {
+                            quranContent.text('Error loading text');
+                            audioError.text('Error loading text').show();
                         });
                 });
             });
 
-            // Trigger initial load
+            // Trigger initial load if a surah is selected
             if (select.val()) {
                 select.trigger('change');
             }

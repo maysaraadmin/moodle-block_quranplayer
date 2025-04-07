@@ -1,5 +1,5 @@
 <div class="block_quranplayer" data-instanceid="{{instanceid}}">
-    <label for="quranplayer-select-{{instanceid}}">{{title}}</label>
+    <label for="quranplayer-select-{{instanceid}}">{{#str}}selectfile, block_quranplayer{{/str}}</label>
     <select id="quranplayer-select-{{instanceid}}" class="form-control">
         <option value="">{{#str}}selectfile, block_quranplayer{{/str}}</option>
         {{#surahs}}
@@ -7,7 +7,7 @@
         {{/surahs}}
     </select>
     
-    <div id="quran-text-{{instanceid}}" class="quran-text mt-3">
+    <div class="quran-text mt-3">
         <h3>{{title}}</h3>
         <pre id="quran-content-{{instanceid}}" style="white-space: pre-wrap;">{{loading}}</pre>
     </div>
