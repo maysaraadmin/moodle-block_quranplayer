@@ -31,7 +31,7 @@ class block_quranplayer extends block_base {
     }
 
     public function get_content() {
-        global $USER;
+        global $PAGE;
 
         if ($this->content !== null) {
             return $this->content;
@@ -42,16 +42,39 @@ class block_quranplayer extends block_base {
         }
 
         $this->content = new stdClass();
-        $this->content->text = $this->render_audio_player();
+        $this->content->text = '';
         $this->content->footer = '';
+
+        // Set up the renderer.
+        $renderer = $this->page->get_renderer('block_quranplayer');
+
+        // Prepare the data for the template.
+        $data = [
+            'title' => $this->title,
+            'surahs' => $this->get_surah_list(),
+            'loading' => get_string('loading', 'block_quranplayer'),
+            'wwwroot' => (new moodle_url('/'))->out(),
+            'sesskey' => sesskey(),
+            'instanceid' => $this->context->instanceid
+        ];
+
+        // Add JavaScript module.
+        $PAGE->requires->js_call_amd('block_quranplayer/quranplayer', 'init', [
+            'instanceid' => $this->context->instanceid
+        ]);
+
+        $this->content->text = $renderer->render_quran_player($data);
 
         return $this->content;
     }
 
-    private function render_audio_player() {
-        global $CFG, $USER;
-
-        $quranchapters = [
+    /**
+     * Get the list of Quran chapters with their names.
+     *
+     * @return array List of surahs with number and name
+     */
+    private function get_surah_list() {
+        $surahs = [
             "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
             "هود", "يوسف", "الرعد", "ابراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه",
             "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنكبوت", "الروم",
@@ -66,86 +89,13 @@ class block_quranplayer extends block_base {
             "المسد", "الإخلاص", "الفلق", "الناس",
         ];
 
-        $options = '';
-        for ($surahnumber = 1; $surahnumber <= 114; $surahnumber++) {
-            $surahname = $quranchapters[$surahnumber - 1];
-            $options .= "<option value='$surahnumber'>$surahnumber. $surahname</option>";
+        $result = [];
+        foreach ($surahs as $index => $name) {
+            $result[] = [
+                'number' => $index + 1,
+                'name' => $name
+            ];
         }
-
-        $html = <<<HTML
-<div>
-    <label for="quranplayer-select">{$this->title}</label>
-    <select id="quranplayer-select">
-        $options
-    </select>
-    <div id="quran-text">
-        <h3>{$this->title}</h3>
-        <pre id="quran-content">{$this->get_loading_message()}</pre>
-    </div>
-    <audio id="quranplayer" controls>
-        <source id="quranplayer-source" src="" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    <div id="audio-error" style="color: red; display: none;">Failed to load audio.</div>
-</div>
-<script>
-    const select = document.getElementById('quranplayer-select');
-    const audio = document.getElementById('quranplayer');
-    const source = document.getElementById('quranplayer-source');
-    const quranContent = document.getElementById('quran-content');
-    const audioError = document.getElementById('audio-error');
-
-    select.addEventListener('change', function() {
-        const selectedSurah = this.value;
-        const audioUrl = 'https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/' + String(selectedSurah).padStart(3, '0') + '.mp3';
-
-        // Check if the audio file exists before setting the source.
-        fetch(audioUrl, { method: 'HEAD' })
-            .then(response => {
-                if (response.ok) {
-                    source.src = audioUrl;
-                    audio.load();
-                    audioError.style.display = 'none';
-                } else {
-                    audioError.style.display = 'block';
-                    audioError.textContent = 'Audio file not found for this chapter.';
-                }
-            })
-            .catch(() => {
-                audioError.style.display = 'block';
-                audioError.textContent = 'Failed to check audio file.';
-            });
-
-        quranContent.textContent = '{$this->get_loading_message()}';
-
-        fetch('{$CFG->wwwroot}/blocks/quranplayer/get_quran_text.php?file=' + selectedSurah + '&sesskey=' + '{$USER->sesskey}')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
-            .then(text => {
-                quranContent.textContent = text;
-            })
-            .catch(error => {
-                quranContent.textContent = '{$this->get_error_message()}';
-                console.error('Error fetching Quran text:', error);
-            });
-    });
-
-    select.dispatchEvent(new Event('change'));
-</script>
-HTML;
-
-        return $html;
-    }
-
-    private function get_loading_message() {
-        return get_string('loading', 'block_quranplayer');
-    }
-
-    private function get_error_message() {
-        return get_string('errorloading', 'block_quranplayer');
+        return $result;
     }
 }
