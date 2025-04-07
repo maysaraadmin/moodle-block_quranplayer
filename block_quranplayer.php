@@ -1,27 +1,4 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
-/**
- * Quran Player block.
- *
- * @package    block_quranplayer
- * @copyright  2025 Maysara Mohamed
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 defined('MOODLE_INTERNAL') || die();
 
 class block_quranplayer extends block_base {
@@ -31,48 +8,38 @@ class block_quranplayer extends block_base {
     }
 
     public function get_content() {
-        global $PAGE;
+        global $PAGE, $OUTPUT;
 
         if ($this->content !== null) {
             return $this->content;
-        }
-
-        if (!has_capability('block/quranplayer:view', $this->context)) {
-            return null;
         }
 
         $this->content = new stdClass();
         $this->content->text = '';
         $this->content->footer = '';
 
-        // Set up the renderer.
-        $renderer = $this->page->get_renderer('block_quranplayer');
+        if (!has_capability('block/quranplayer:view', $this->context)) {
+            return $this->content;
+        }
 
-        // Prepare the data for the template.
+        // Prepare template data
         $data = [
             'title' => $this->title,
             'surahs' => $this->get_surah_list(),
             'loading' => get_string('loading', 'block_quranplayer'),
-            'wwwroot' => (new moodle_url('/'))->out(),
-            'sesskey' => sesskey(),
             'instanceid' => $this->context->instanceid
         ];
 
-        // Add JavaScript module.
+        // Add AMD module
         $PAGE->requires->js_call_amd('block_quranplayer/quranplayer', 'init', [
-            'instanceid' => $this->context->instanceid
+            'instanceid' => $this->context->instanceid,
+            'sesskey' => sesskey()
         ]);
 
-        $this->content->text = $renderer->render_quran_player($data);
-
+        $this->content->text = $OUTPUT->render_from_template('block_quranplayer/quran_player', $data);
         return $this->content;
     }
 
-    /**
-     * Get the list of Quran chapters with their names.
-     *
-     * @return array List of surahs with number and name
-     */
     private function get_surah_list() {
         $surahs = [
             "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
@@ -91,10 +58,7 @@ class block_quranplayer extends block_base {
 
         $result = [];
         foreach ($surahs as $index => $name) {
-            $result[] = [
-                'number' => $index + 1,
-                'name' => $name
-            ];
+            $result[] = ['number' => $index + 1, 'name' => $name];
         }
         return $result;
     }

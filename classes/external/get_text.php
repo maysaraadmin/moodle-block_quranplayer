@@ -11,14 +11,25 @@ use external_single_structure;
 class get_text extends external_api {
     public static function execute_parameters() {
         return new external_function_parameters([
-            'surah' => new external_value(PARAM_INT, 'Surah number', VALUE_REQUIRED)
+            'surah' => new external_value(PARAM_INT, 'Surah number', VALUE_REQUIRED),
+            'sesskey' => new external_value(PARAM_TEXT, 'Session key', VALUE_REQUIRED)
         ]);
     }
 
-    public static function execute($surah) {
-        global $USER;
+    public static function execute($surah, $sesskey) {
+        global $CFG, $USER;
 
-        $params = self::validate_parameters(self::execute_parameters(), ['surah' => $surah]);
+        $params = self::validate_parameters(self::execute_parameters(), [
+            'surah' => $surah,
+            'sesskey' => $sesskey
+        ]);
+
+        if (!confirm_sesskey($params['sesskey'])) {
+            return [
+                'success' => false,
+                'text' => get_string('noqurantext', 'block_quranplayer')
+            ];
+        }
 
         if ($params['surah'] < 1 || $params['surah'] > 114) {
             return [
@@ -27,7 +38,7 @@ class get_text extends external_api {
             ];
         }
 
-        $quranfile = __DIR__ . '/../../quran.txt';
+        $quranfile = $CFG->dirroot . '/blocks/quranplayer/quran.txt';
         if (!file_exists($quranfile)) {
             return [
                 'success' => false,
@@ -40,9 +51,11 @@ class get_text extends external_api {
         $selectedtext = '';
 
         foreach ($lines as $line) {
-            list($linesurah, $lineverse, $text) = explode('|', $line, 3);
-            if ($linesurah == $params['surah']) {
-                $selectedtext .= "$lineverse. $text\n";
+            if (empty(trim($line))) continue;
+            
+            $parts = explode('|', $line, 3);
+            if (count($parts) === 3 && $parts[0] == $params['surah']) {
+                $selectedtext .= $parts[1] . '. ' . $parts[2] . "\n";
             }
         }
 
