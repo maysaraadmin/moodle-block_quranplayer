@@ -41,3 +41,7 @@ $string['browsererror'] = 'Your browser does not support the audio element.';
 $string['audioerror'] = 'Failed to load audio.';
 $string['audiofilenotfound'] = 'Audio file not found for this chapter.';
 $string['audiofilecheckfailed'] = 'Failed to check audio file.';
+$string['surah'] = 'Surah';
+$string['ayah'] = 'Ayah';
+$string['viewfullsurah'] = 'View full surah';
+$string['viewayah'] = 'View ayah';

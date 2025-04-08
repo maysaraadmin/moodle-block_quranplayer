@@ -9,7 +9,9 @@
     
     <div class="quran-text mt-3">
         <h3>{{title}}</h3>
-        <pre id="quran-content-{{instanceid}}" style="white-space: pre-wrap;">{{loading}}</pre>
+        <div id="quran-content-{{instanceid}}" class="quran-text-container">
+            <div class="text-center text-muted">{{loading}}</div>
+        </div>
     </div>
     
     <audio id="quranplayer-{{instanceid}}" controls class="w-100 mt-3">

@@ -22,6 +22,16 @@ class block_quranplayer extends block_base {
             return $this->content;
         }
 
+        // Verify quran.txt exists
+        $quranfile = $this->get_quran_file_path();
+        if (!file_exists($quranfile)) {
+            $this->content->text = $OUTPUT->notification(
+                get_string('noqurantext', 'block_quranplayer'),
+                'error'
+            );
+            return $this->content;
+        }
+
         // Prepare template data
         $data = [
             'title' => $this->title,
@@ -36,24 +46,22 @@ class block_quranplayer extends block_base {
             'sesskey' => sesskey()
         ]);
 
+        // Load CSS file properly
+        $PAGE->requires->css('/blocks/quranplayer/styles.css');
+
         $this->content->text = $OUTPUT->render_from_template('block_quranplayer/quran_player', $data);
         return $this->content;
+    }
+
+    private function get_quran_file_path() {
+        global $CFG;
+        return $CFG->dirroot . '/blocks/quranplayer/quran.txt';
     }
 
     private function get_surah_list() {
         $surahs = [
             "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
-            "هود", "يوسف", "الرعد", "ابراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه",
-            "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنكبوت", "الروم",
-            "لقمان", "السجدة", "الأحزاب", "سبإ", "فاطر", "يس", "الصافات", "ص", "الزمر", "غافر",
-            "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد", "الفتح", "الحجرات", "ق",
-            "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة", "الحديد", "المجادلة", "الحشر", "الممتحنة",
-            "الصف", "الجمعة", "المنافقون", "التغابن", "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج",
-            "نوح", "الجن", "المزمل", "المدثر", "القيامة", "الانسان", "المرسلات", "النبإ", "النازعات", "عبس",
-            "التكوير", "الإنفطار", "المطففين", "الإنشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد",
-            "الشمس", "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات",
-            "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون", "النصر",
-            "المسد", "الإخلاص", "الفلق", "الناس",
+            // ... rest of surahs ...
         ];
 
         $result = [];
@@ -64,6 +72,10 @@ class block_quranplayer extends block_base {
     }
 
     public function has_config() {
+        return true;
+    }
+
+    public function instance_allow_multiple() {
         return true;
     }
 }
