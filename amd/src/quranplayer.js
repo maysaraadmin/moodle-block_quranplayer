@@ -8,13 +8,14 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification'], function($, aja
             const quranContent = $('#quran-content-' + instanceid);
             const audioError = $('#audio-error-' + instanceid);
 
+            // Clear content initially
+            quranContent.empty();
+
             // Audio error handling
             const handleAudioError = function() {
                 str.get_string('audioerror', 'block_quranplayer').then(function(msg) {
                     audioError.text(msg).show();
-                }).catch(function() {
-                    audioError.text('Audio loading error').show();
-                });
+                }).catch(notification.exception);
             };
             audio.addEventListener('error', handleAudioError);
 
@@ -28,26 +29,27 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification'], function($, aja
 
                 try {
                     // Show loading state
-                    quranContent.html('<div class="text-center"><i class="fa fa-spinner fa-spin"></i> ' + 
-                        await str.get_string('loading', 'block_quranplayer') + '</div>');
+                    const loadingMsg = await str.get_string('loading', 'block_quranplayer');
+                    quranContent.html(`<div class="text-center"><i class="fa fa-spinner fa-spin"></i> ${loadingMsg}</div>`);
                     audioError.hide();
 
                     // Load audio
-                    const audioUrl = 'https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/' + 
-                        String(selectedSurah).padStart(3, '0') + '.mp3';
-                    source.src = audioUrl;
+                    source.src = `https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/${String(selectedSurah).padStart(3, '0')}.mp3`;
                     audio.load();
 
-                    // Load Quran text via AJAX
-                    const response = await ajax.call([{
+                    // Load Quran text via AJAX - FIXED response handling
+                    const responses = await ajax.call([{
                         methodname: 'block_quranplayer_get_text',
                         args: { 
                             surah: parseInt(selectedSurah),
                             sesskey: params.sesskey
                         }
-                    }])[0];
+                    }]);
 
-                    if (response.success) {
+                    const response = responses[0]; // Get first response
+
+                    if (response && response.success) {
+                        // FIX: Ensure text is properly inserted
                         quranContent.html(response.text);
                         try {
                             await audio.play();
@@ -55,7 +57,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification'], function($, aja
                             console.log('Auto-play prevented:', e);
                         }
                     } else {
-                        throw new Error(response.text || 'Invalid response from server');
+                        throw new Error(response?.text || 'Invalid response from server');
                     }
                 } catch (error) {
                     console.error('Error:', error);
@@ -64,18 +66,17 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification'], function($, aja
                             {key: 'errorloading', component: 'block_quranplayer'},
                             {key: 'noqurantext', component: 'block_quranplayer'}
                         ]);
-                        
-                        quranContent.html('<div class="alert alert-danger">' + 
-                            (error.message || errorMsg) + '</div>');
+                        quranContent.html(`<div class="alert alert-danger">${error.message || errorMsg}</div>`);
                         audioError.text(noTextMsg).show();
                     } catch (e) {
+                        notification.exception(e);
                         quranContent.html('<div class="alert alert-danger">Error loading content</div>');
                         audioError.text('Failed to load text').show();
                     }
                 }
             });
 
-            // Cleanup on unload
+            // Cleanup
             return function() {
                 audio.removeEventListener('error', handleAudioError);
                 select.off('change');

@@ -39,8 +39,8 @@
     color: #721c24;
 }
 
-.block_quranplayer select {
-    margin-bottom: 15px;
+.text-muted {
+    color: #6c757d;
 }
 
 .fa-spinner {
@@ -50,10 +50,5 @@
 @media (max-width: 768px) {
     .ayah {
         font-size: 18px;
-    }
-    
-    .quran-text-container {
-        min-height: 80px;
-        padding: 10px;
     }
 }
