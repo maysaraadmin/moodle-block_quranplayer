@@ -8,69 +8,80 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification'], function($, aja
             const quranContent = $('#quran-content-' + instanceid);
             const audioError = $('#audio-error-' + instanceid);
 
-            // Set initial state
-            quranContent.html('<div class="text-center text-muted">Select a surah to begin</div>');
-
             // Audio error handling
-            audio.addEventListener('error', function() {
+            const handleAudioError = function() {
                 str.get_string('audioerror', 'block_quranplayer').then(function(msg) {
-                    audioError.html(msg).show();
+                    audioError.text(msg).show();
+                }).catch(function() {
+                    audioError.text('Audio loading error').show();
                 });
-            });
+            };
+            audio.addEventListener('error', handleAudioError);
 
-            select.on('change', function() {
+            select.on('change', async function() {
                 const selectedSurah = $(this).val();
                 if (!selectedSurah) {
-                    quranContent.html('<div class="text-center text-muted">Select a surah to begin</div>');
+                    const msg = await str.get_string('selectfile', 'block_quranplayer')
+                        .catch(notification.exception);
+                    quranContent.html('<div class="text-center text-muted">' + msg + '</div>');
                     audioError.hide();
                     return;
                 }
 
-                // Show loading message
-                quranContent.html('<div class="text-center text-muted">Loading Quran text...</div>');
+                try {
+                    // Show loading state
+                    quranContent.html('<div class="text-center"><i class="fa fa-spinner fa-spin"></i> ' + 
+                        await str.get_string('loading', 'block_quranplayer') + '</div>');
+                    audioError.hide();
 
-                // Load audio
-                const audioUrl = 'https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/' + 
-                    String(selectedSurah).padStart(3, '0') + '.mp3';
-                source.src = audioUrl;
-                audio.load();
+                    // Load audio
+                    const audioUrl = 'https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/' + 
+                        String(selectedSurah).padStart(3, '0') + '.mp3';
+                    source.src = audioUrl;
+                    audio.load();
 
-                // Load Quran text via AJAX
-                ajax.call([{
-                    methodname: 'block_quranplayer_get_text',
-                    args: { 
-                        surah: selectedSurah,
-                        sesskey: params.sesskey
-                    }
-                }])[0]
-                .done(function(response) {
-                    console.log('AJAX Response:', response); // Debug log
+                    // Load Quran text via AJAX
+                    const [response] = await ajax.call([{
+                        methodname: 'block_quranplayer_get_text',
+                        args: { 
+                            surah: parseInt(selectedSurah),
+                            sesskey: params.sesskey
+                        }
+                    }]);
+
                     if (response && response.success) {
                         quranContent.html(response.text);
-                        audioError.hide();
-                        audio.play().catch(e => console.log('Auto-play prevented:', e));
+                        try {
+                            await audio.play();
+                        } catch (e) {
+                            console.log('Auto-play prevented:', e);
+                        }
                     } else {
-                        throw new Error(response?.text || 'Invalid response');
+                        throw new Error(response?.text || 'Invalid response from server');
                     }
-                })
-                .fail(function(error) {
-                    console.error('AJAX Error:', error); // Debug log
-                    str.get_string('errorloading', 'block_quranplayer')
-                        .then(function(msg) {
-                            quranContent.html('<div class="alert alert-danger">' + msg + '</div>');
-                            audioError.html(error.message || msg).show();
-                        })
-                        .catch(function() {
-                            quranContent.html('<div class="alert alert-danger">Error loading text</div>');
-                            audioError.html('Error loading text').show();
-                        });
-                });
+                } catch (error) {
+                    console.error('Error:', error);
+                    try {
+                        const [errorMsg, noTextMsg] = await str.get_strings([
+                            {key: 'errorloading', component: 'block_quranplayer'},
+                            {key: 'noqurantext', component: 'block_quranplayer'}
+                        ]);
+                        
+                        quranContent.html('<div class="alert alert-danger">' + 
+                            (error.message || errorMsg) + '</div>');
+                        audioError.text(noTextMsg).show();
+                    } catch (e) {
+                        quranContent.html('<div class="alert alert-danger">Error loading content</div>');
+                        audioError.text('Failed to load text').show();
+                    }
+                }
             });
 
-            // Trigger initial load if a surah is selected
-            if (select.val()) {
-                select.trigger('change');
-            }
+            // Cleanup on unload
+            return function() {
+                audio.removeEventListener('error', handleAudioError);
+                select.off('change');
+            };
         }
     };
 });

@@ -8,7 +8,7 @@ class block_quranplayer extends block_base {
     }
 
     public function get_content() {
-        global $PAGE, $OUTPUT;
+        global $PAGE, $OUTPUT, $CFG;
 
         if ($this->content !== null) {
             return $this->content;
@@ -19,6 +19,10 @@ class block_quranplayer extends block_base {
         $this->content->footer = '';
 
         if (!has_capability('block/quranplayer:view', $this->context)) {
+            $this->content->text = $OUTPUT->notification(
+                get_string('nopermissions', 'block_quranplayer'),
+                'error'
+            );
             return $this->content;
         }
 
@@ -36,23 +40,15 @@ class block_quranplayer extends block_base {
         $data = [
             'title' => $this->title,
             'surahs' => $this->get_surah_list(),
-            'loading' => get_string('loading', 'block_quranplayer'),
-            'instanceid' => $this->context->instanceid
+            'instanceid' => $this->context->instanceid,
+            'initialtext' => get_string('selectfile', 'block_quranplayer')
         ];
 
-        // Add AMD module with error handling
-        try {
-            $PAGE->requires->js_call_amd('block_quranplayer/quranplayer', 'init', [
-                'instanceid' => $this->context->instanceid,
-                'sesskey' => sesskey()
-            ]);
-        } catch (Exception $e) {
-            $this->content->text = $OUTPUT->notification(
-                get_string('errorloading', 'block_quranplayer'),
-                'error'
-            );
-            return $this->content;
-        }
+        // Add AMD module
+        $PAGE->requires->js_call_amd('block_quranplayer/quranplayer', 'init', [
+            'instanceid' => $this->context->instanceid,
+            'sesskey' => sesskey()
+        ]);
 
         // Load CSS
         $PAGE->requires->css('/blocks/quranplayer/styles.css');
@@ -63,13 +59,16 @@ class block_quranplayer extends block_base {
 
     private function get_surah_list() {
         $surahs = [
-            "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
+            "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", 
             // ... rest of surahs ...
+            "الإخلاص", "الفلق", "الناس"
         ];
 
-        return array_map(function($index, $name) {
-            return ['number' => $index + 1, 'name' => $name];
-        }, array_keys($surahs), $surahs);
+        $result = [];
+        foreach ($surahs as $index => $name) {
+            $result[] = ['number' => $index + 1, 'name' => $name];
+        }
+        return $result;
     }
 
     public function has_config() {

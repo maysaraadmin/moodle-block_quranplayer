@@ -45,3 +45,4 @@ $string['surah'] = 'Surah';
 $string['ayah'] = 'Ayah';
 $string['viewfullsurah'] = 'View full surah';
 $string['viewayah'] = 'View ayah';
+$string['nopermissions'] = 'You do not have permission to view the Quran Player.';

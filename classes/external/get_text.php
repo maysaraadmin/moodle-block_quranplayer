@@ -42,31 +42,35 @@ class get_text extends external_api {
         // Get Quran file
         $quranfile = $CFG->dirroot . '/blocks/quranplayer/quran.txt';
         if (!file_exists($quranfile)) {
-            throw new moodle_exception('noqurantext', 'block_quranplayer');
+            return [
+                'success' => false,
+                'text' => get_string('noqurantext', 'block_quranplayer')
+            ];
         }
 
-        $qurantext = file_get_contents($quranfile);
+        $qurantext = file($quranfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         if ($qurantext === false) {
-            throw new moodle_exception('noqurantext', 'block_quranplayer');
+            return [
+                'success' => false,
+                'text' => get_string('noqurantext', 'block_quranplayer')
+            ];
         }
 
-        // Parse Quran text
-        $lines = explode("\n", $qurantext);
         $selectedtext = '';
-
-        foreach ($lines as $line) {
-            $line = trim($line);
-            if (empty($line)) continue;
-            
-            $parts = explode('|', $line, 3);
-            if (count($parts) === 3 && $parts[0] == $params['surah']) {
+        foreach ($qurantext as $line) {
+            $parts = explode('|', trim($line), 3);
+            if (count($parts) === 3 && (int)$parts[0] === (int)$params['surah']) {
                 $selectedtext .= '<div class="ayah"><span class="ayah-number">' . 
-                               $parts[1] . '.</span> ' . $parts[2] . '</div>';
+                               htmlspecialchars($parts[1]) . '.</span> ' . 
+                               htmlspecialchars($parts[2]) . '</div>';
             }
         }
 
         if (empty($selectedtext)) {
-            throw new moodle_exception('noqurantext', 'block_quranplayer');
+            return [
+                'success' => false,
+                'text' => get_string('noqurantext', 'block_quranplayer')
+            ];
         }
 
         return [

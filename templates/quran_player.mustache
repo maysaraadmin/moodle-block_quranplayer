@@ -9,11 +9,11 @@
     
     <div class="quran-text mt-3">
         <div id="quran-content-{{instanceid}}" class="quran-text-container">
-            <div class="text-center text-muted">{{loading}}</div>
+            <div class="text-center text-muted">{{initialtext}}</div>
         </div>
     </div>
     
-    <audio id="quranplayer-{{instanceid}}" controls class="w-100 mt-3">
+    <audio id="quranplayer-{{instanceid}}" controls class="w-100 mt-3" preload="none">
         <source id="quranplayer-source-{{instanceid}}" src="" type="audio/mpeg">
         {{#str}}browsererror, block_quranplayer{{/str}}
     </audio>

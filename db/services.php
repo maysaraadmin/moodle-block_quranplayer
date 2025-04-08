@@ -9,6 +9,7 @@ $functions = [
         'type' => 'read',
         'ajax' => true,
         'loginrequired' => true,
+        'capabilities' => 'block/quranplayer:view',
     ],
 ];
 
