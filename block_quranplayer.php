@@ -23,7 +23,7 @@ class block_quranplayer extends block_base {
         }
 
         // Verify quran.txt exists
-        $quranfile = $this->get_quran_file_path();
+        $quranfile = $CFG->dirroot . '/blocks/quranplayer/quran.txt';
         if (!file_exists($quranfile)) {
             $this->content->text = $OUTPUT->notification(
                 get_string('noqurantext', 'block_quranplayer'),
@@ -40,22 +40,25 @@ class block_quranplayer extends block_base {
             'instanceid' => $this->context->instanceid
         ];
 
-        // Add AMD module
-        $PAGE->requires->js_call_amd('block_quranplayer/quranplayer', 'init', [
-            'instanceid' => $this->context->instanceid,
-            'sesskey' => sesskey()
-        ]);
+        // Add AMD module with error handling
+        try {
+            $PAGE->requires->js_call_amd('block_quranplayer/quranplayer', 'init', [
+                'instanceid' => $this->context->instanceid,
+                'sesskey' => sesskey()
+            ]);
+        } catch (Exception $e) {
+            $this->content->text = $OUTPUT->notification(
+                get_string('errorloading', 'block_quranplayer'),
+                'error'
+            );
+            return $this->content;
+        }
 
-        // Load CSS file properly
+        // Load CSS
         $PAGE->requires->css('/blocks/quranplayer/styles.css');
 
         $this->content->text = $OUTPUT->render_from_template('block_quranplayer/quran_player', $data);
         return $this->content;
-    }
-
-    private function get_quran_file_path() {
-        global $CFG;
-        return $CFG->dirroot . '/blocks/quranplayer/quran.txt';
     }
 
     private function get_surah_list() {
@@ -64,18 +67,12 @@ class block_quranplayer extends block_base {
             // ... rest of surahs ...
         ];
 
-        $result = [];
-        foreach ($surahs as $index => $name) {
-            $result[] = ['number' => $index + 1, 'name' => $name];
-        }
-        return $result;
+        return array_map(function($index, $name) {
+            return ['number' => $index + 1, 'name' => $name];
+        }, array_keys($surahs), $surahs);
     }
 
     public function has_config() {
-        return true;
-    }
-
-    public function instance_allow_multiple() {
         return true;
     }
 }

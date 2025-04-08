@@ -3,10 +3,10 @@ namespace block_quranplayer\external;
 
 defined('MOODLE_INTERNAL') || die();
 
-use external_api;
-use external_function_parameters;
-use external_value;
-use external_single_structure;
+use core_external\external_api;
+use core_external\external_function_parameters;
+use core_external\external_value;
+use core_external\external_single_structure;
 use moodle_exception;
 
 class get_text extends external_api {
@@ -18,7 +18,7 @@ class get_text extends external_api {
     }
 
     public static function execute($surah, $sesskey) {
-        global $CFG, $USER;
+        global $CFG;
 
         // Validate parameters
         $params = self::validate_parameters(self::execute_parameters(), [
@@ -39,24 +39,18 @@ class get_text extends external_api {
             ];
         }
 
-        // Get Quran file path
+        // Get Quran file
         $quranfile = $CFG->dirroot . '/blocks/quranplayer/quran.txt';
         if (!file_exists($quranfile)) {
-            return [
-                'success' => false,
-                'text' => get_string('noqurantext', 'block_quranplayer')
-            ];
+            throw new moodle_exception('noqurantext', 'block_quranplayer');
         }
 
-        // Read and parse Quran file
         $qurantext = file_get_contents($quranfile);
         if ($qurantext === false) {
-            return [
-                'success' => false,
-                'text' => get_string('noqurantext', 'block_quranplayer')
-            ];
+            throw new moodle_exception('noqurantext', 'block_quranplayer');
         }
 
+        // Parse Quran text
         $lines = explode("\n", $qurantext);
         $selectedtext = '';
 
@@ -66,13 +60,18 @@ class get_text extends external_api {
             
             $parts = explode('|', $line, 3);
             if (count($parts) === 3 && $parts[0] == $params['surah']) {
-                $selectedtext .= '<span class="ayah">' . $parts[1] . '. ' . $parts[2] . '</span><br>';
+                $selectedtext .= '<div class="ayah"><span class="ayah-number">' . 
+                               $parts[1] . '.</span> ' . $parts[2] . '</div>';
             }
         }
 
+        if (empty($selectedtext)) {
+            throw new moodle_exception('noqurantext', 'block_quranplayer');
+        }
+
         return [
-            'success' => !empty($selectedtext),
-            'text' => $selectedtext ?: get_string('noqurantext', 'block_quranplayer')
+            'success' => true,
+            'text' => $selectedtext
         ];
     }
 
