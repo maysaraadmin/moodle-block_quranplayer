@@ -21,9 +21,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification'], function($, aja
             select.on('change', async function() {
                 const selectedSurah = $(this).val();
                 if (!selectedSurah) {
-                    const msg = await str.get_string('selectfile', 'block_quranplayer')
-                        .catch(notification.exception);
-                    quranContent.html('<div class="text-center text-muted">' + msg + '</div>');
+                    quranContent.empty();
                     audioError.hide();
                     return;
                 }
@@ -41,15 +39,15 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification'], function($, aja
                     audio.load();
 
                     // Load Quran text via AJAX
-                    const [response] = await ajax.call([{
+                    const response = await ajax.call([{
                         methodname: 'block_quranplayer_get_text',
                         args: { 
                             surah: parseInt(selectedSurah),
                             sesskey: params.sesskey
                         }
-                    }]);
+                    }])[0];
 
-                    if (response && response.success) {
+                    if (response.success) {
                         quranContent.html(response.text);
                         try {
                             await audio.play();
@@ -57,7 +55,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/notification'], function($, aja
                             console.log('Auto-play prevented:', e);
                         }
                     } else {
-                        throw new Error(response?.text || 'Invalid response from server');
+                        throw new Error(response.text || 'Invalid response from server');
                     }
                 } catch (error) {
                     console.error('Error:', error);

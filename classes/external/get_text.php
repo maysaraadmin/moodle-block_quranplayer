@@ -61,8 +61,8 @@ class get_text extends external_api {
             $parts = explode('|', trim($line), 3);
             if (count($parts) === 3 && (int)$parts[0] === (int)$params['surah']) {
                 $selectedtext .= '<div class="ayah"><span class="ayah-number">' . 
-                               htmlspecialchars($parts[1]) . '.</span> ' . 
-                               htmlspecialchars($parts[2]) . '</div>';
+                               htmlspecialchars($parts[1], ENT_QUOTES | ENT_HTML5) . '.</span> ' . 
+                               htmlspecialchars($parts[2], ENT_QUOTES | ENT_HTML5) . '</div>';
             }
         }
 

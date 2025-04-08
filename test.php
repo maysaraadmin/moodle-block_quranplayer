@@ -5,7 +5,7 @@ require_once($CFG->dirroot . '/blocks/quranplayer/classes/external/get_text.php'
 require_login();
 
 // Test with Surah 1
-$surah = 111;
+$surah = 113;
 $sesskey = sesskey();
 
 try {

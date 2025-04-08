@@ -40,8 +40,7 @@ class block_quranplayer extends block_base {
         $data = [
             'title' => $this->title,
             'surahs' => $this->get_surah_list(),
-            'instanceid' => $this->context->instanceid,
-            'initialtext' => get_string('selectfile', 'block_quranplayer')
+            'instanceid' => $this->context->instanceid
         ];
 
         // Add AMD module
