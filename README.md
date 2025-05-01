@@ -1,132 +1,87 @@
-# Quran Player Moodle Block Plugin 🎧🕌
+# Quran Player Plugin
 
-The **Quran Player Block Plugin** is a Moodle block designed to enhance the learning experience by integrating an audio player for Quran chapters directly into Moodle courses. This plugin allows users to play Quran audio files and display the corresponding Quran text alongside the audio.
+A WordPress plugin that provides a beautiful and functional Quran player with multiple reciters and translations.
 
-## Features ✨
-- **Audio Player**: Play Quran chapters directly in Moodle.
-- **Quran Text Display**: Display the corresponding Quran text for the selected chapter.
-- **Easy Integration**: Add the block to any Moodle course or dashboard.
-- **Customizable**: Easily customize the player's appearance using CSS.
-- **Error Handling**: Gracefully handles missing files or directories.
+## Features
 
----
+- Multiple reciters to choose from
+- Multiple translations in different languages
+- Beautiful and responsive UI
+- Customizable player settings
+- Bookmarking functionality
+- Search functionality
+- Mobile-friendly design
 
-## Installation 🛠️
+## Installation
 
-### Prerequisites
-- Moodle 3.11 or later.
-- PHP 7.4 or later.
-- Access to the Moodle `blocks` directory.
+1. Download the plugin zip file
+2. Go to WordPress admin panel > Plugins > Add New
+3. Click on "Upload Plugin" and select the downloaded zip file
+4. Click "Install Now" and then "Activate"
 
-### Steps
-1. **Download the Plugin**:
-   - Clone this repository or download the ZIP file.
-   ```bash
-   git clone https://github.com/maysaraadmin/moodle-block_quranplayer.git
-   ```
+## Usage
 
-2. **Install the Plugin**:
-   - Copy the `quranplayer` folder to your Moodle `blocks` directory:
-     ```
-     moodle/blocks/quranplayer
-     ```
+### Shortcode
 
-3. **Install via Moodle**:
-   - Log in to your Moodle site as an administrator.
-   - Navigate to **Site Administration > Notifications**.
-   - Moodle will detect the new block and install it automatically.
+Use the following shortcode to display the Quran player:
 
-4. **Add MP3 Files**:
-   - Place your Quran audio files (in MP3 format) in the `mp3` directory:
-     ```
-     moodle/blocks/quranplayer/mp3/
-     ```
-   - Ensure the files are named sequentially (e.g., `001.mp3`, `002.mp3`, etc.).
+```
+[quran_player]
+```
 
-5. **Add Quran Text**:
-   - Place the `quran.txt` file in the plugin directory:
-     ```
-     moodle/blocks/quranplayer/quran.txt
-     ```
-   - The file should contain Quran text in the format:
-     ```
-     surah|verse|text
-     ```
-     Example:
-     ```
-     1|1|بسم الله الرحمن الرحيم
-     ```
+### Widget
 
----
+The plugin also provides a widget that you can add to any widget area:
 
-## Usage 🎯
+1. Go to Appearance > Widgets
+2. Find the "Quran Player" widget
+3. Drag and drop it to your desired widget area
+4. Configure the widget settings
+5. Save the changes
 
-1. **Add the Block**:
-   - Go to the course or dashboard where you want to add the block.
-   - Turn editing on and click **"Add a block"**.
-   - Select **"Quran Player"** from the list of blocks.
+### Settings
 
-2. **Select a Chapter**:
-   - Use the dropdown menu to select a Quran chapter.
-   - The audio player will load the selected chapter, and the corresponding Quran text will be displayed.
+You can configure the plugin settings from:
 
-3. **Customize the Player**:
-   - You can customize the appearance of the player by editing the `styles.css` file in the plugin directory.
+WordPress Admin > Settings > Quran Player
 
----
-## Contributing 🤝
+Available settings include:
+- Default reciter
+- Default translation
+- Player theme
+- Auto-play settings
+- And more...
 
-We welcome contributions from the community! Whether you're a developer, tester, or documentation enthusiast, your help is appreciated.
+## Requirements
 
-### How to Contribute
-1. **Fork the Repository**:
-   - Fork this repository to your GitHub account.
+- WordPress 5.0 or higher
+- PHP 7.2 or higher
+- Modern web browser with JavaScript enabled
 
-2. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/maysaraadmin/moodle-block_quranplayer.git
-   ```
+## Support
 
-3. **Create a Branch**:
-   - Create a new branch for your feature or bug fix:
-     ```bash
-     git checkout -b feature/your-feature-name
-     ```
+For support, feature requests, or bug reports, please visit our [GitHub repository](https://github.com/yourusername/quran-player) or contact us through our [support page](https://yourwebsite.com/support).
 
-4. **Make Changes**:
-   - Make your changes and test them thoroughly.
+## Contributing
 
-5. **Submit a Pull Request**:
-   - Push your changes to your forked repository and submit a pull request to the `main` branch of this repository.
+We welcome contributions! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
-### Contribution Guidelines
-- Follow Moodle's [coding standards](https://docs.moodle.org/dev/Coding_style).
-- Write clear commit messages and include comments in your code.
-- Test your changes before submitting a pull request.
+## License
 
----
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
-## License 📜
+## Credits
 
-This plugin is released under the **GNU General Public License v3.0**. See the [LICENSE](LICENSE) file for details.
+- Quran audio files are provided by [Quran.com](https://quran.com)
+- Translations are sourced from various trusted sources
+- Icons by [Font Awesome](https://fontawesome.com)
 
----
+## Changelog
 
-## Support and Feedback 💬
-
-If you encounter any issues or have suggestions for improvement, please:
-- Open an issue on [GitHub](https://github.com/maysaraadmin/moodle-block_quranplayer/issues).
-- Reach out to me via email or LinkedIn.
-
-Let’s make this plugin even better together! 🌟
-
----
-
-## Acknowledgments 🙏
-
-- Thanks to the Moodle community for their support and resources.
-- Special thanks to all contributors who help improve this plugin.
-
----
-
-🔗 **GitHub Repository**: [https://github.com/maysaraadmin/moodle-block_quranplayer](https://github.com/maysaraadmin/moodle-block_quranplayer)
+### 1.0.0
+- Initial release
+- Basic player functionality
+- Multiple reciters support
+- Multiple translations support
+- Bookmarking feature
+- Search functionality 

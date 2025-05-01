@@ -1,86 +1,62 @@
-define(['jquery', 'core/ajax', 'core/str', 'core/notification'], function($, ajax, str, notification) {
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * JavaScript for the quranplayer block.
+ *
+ * @module     block_quranplayer/quranplayer
+ * @copyright  2025 Maysara Mohamed
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+define(['jquery'], function($) {
     return {
-        init: function(params) {
-            const instanceid = params.instanceid;
-            const select = $('#quranplayer-select-' + instanceid);
-            const audio = $('#quranplayer-' + instanceid)[0];
-            const source = $('#quranplayer-source-' + instanceid)[0];
-            const quranContent = $('#quran-content-' + instanceid);
-            const audioError = $('#audio-error-' + instanceid);
-
-            // Clear content initially
-            quranContent.empty();
-
-            // Audio error handling
-            const handleAudioError = function() {
-                str.get_string('audioerror', 'block_quranplayer').then(function(msg) {
-                    audioError.text(msg).show();
-                }).catch(notification.exception);
-            };
-            audio.addEventListener('error', handleAudioError);
-
-            select.on('change', async function() {
-                const selectedSurah = $(this).val();
-                if (!selectedSurah) {
-                    quranContent.empty();
-                    audioError.hide();
-                    return;
-                }
-
-                try {
-                    // Show loading state
-                    const loadingMsg = await str.get_string('loading', 'block_quranplayer');
-                    quranContent.html(`<div class="text-center"><i class="fa fa-spinner fa-spin"></i> ${loadingMsg}</div>`);
-                    audioError.hide();
-
-                    // Load audio
-                    source.src = `https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/${String(selectedSurah).padStart(3, '0')}.mp3`;
-                    audio.load();
-
-                    // Load Quran text via AJAX - FIXED response handling
-                    const responses = await ajax.call([{
-                        methodname: 'block_quranplayer_get_text',
-                        args: { 
-                            surah: parseInt(selectedSurah),
-                            sesskey: params.sesskey
-                        }
-                    }]);
-
-                    const response = responses[0]; // Get first response
-
-                    if (response && response.success) {
-                        // FIX: Ensure text is properly inserted
-                        quranContent.html(response.text);
-                        try {
-                            await audio.play();
-                        } catch (e) {
-                            console.log('Auto-play prevented:', e);
-                        }
-                    } else {
-                        throw new Error(response?.text || 'Invalid response from server');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    try {
-                        const [errorMsg, noTextMsg] = await str.get_strings([
-                            {key: 'errorloading', component: 'block_quranplayer'},
-                            {key: 'noqurantext', component: 'block_quranplayer'}
-                        ]);
-                        quranContent.html(`<div class="alert alert-danger">${error.message || errorMsg}</div>`);
-                        audioError.text(noTextMsg).show();
-                    } catch (e) {
-                        notification.exception(e);
-                        quranContent.html('<div class="alert alert-danger">Error loading content</div>');
-                        audioError.text('Failed to load text').show();
-                    }
-                }
+        /**
+         * Initialise the quranplayer block.
+         *
+         * @param {Object} config The configuration object.
+         */
+        init: function(config) {
+            // Add event listeners for audio controls
+            $('.block_quranplayer .quran-audio audio').on('play', function() {
+                // Pause all other audio elements
+                $('.block_quranplayer .quran-audio audio').not(this).each(function() {
+                    this.pause();
+                });
             });
-
-            // Cleanup
-            return function() {
-                audio.removeEventListener('error', handleAudioError);
-                select.off('change');
-            };
+            
+            // Add event listeners for configuration form
+            if (config.hasconfig) {
+                $('#id_s_surah, #id_s_ayah').on('change', function() {
+                    // Validate surah and ayah inputs
+                    var surah = $('#id_s_surah').val();
+                    var ayah = $('#id_s_ayah').val();
+                    
+                    if (surah < 1 || surah > 114) {
+                        alert(M.util.get_string('surah_help', 'block_quranplayer'));
+                        $('#id_s_surah').focus();
+                        return false;
+                    }
+                    
+                    if (ayah < 1) {
+                        alert(M.util.get_string('ayah_help', 'block_quranplayer'));
+                        $('#id_s_ayah').focus();
+                        return false;
+                    }
+                });
+            }
         }
     };
-});
+}); 

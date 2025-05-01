@@ -1,0 +1,113 @@
+{{# hascontent }}
+{{/ hascontent }}
+{{^ hascontent }}
+    <div class="quran-block-empty">
+        {{# str }}configureblock, block_quranplayer{{/ str }}
+    </div>
+{{/ hascontent }}
+
+{{#hascontent}}
+<div id="quran-player-container" class="block_quranplayer">
+    <div class="quran-player-controls">
+        <select id="surah-select" class="form-control">
+            {{#surahs}}
+            <option value="{{number}}" {{#selected}}selected{{/selected}}>{{name}} {{#arabic_name}}({{arabic_name}}){{/arabic_name}}</option>
+            {{/surahs}}
+        </select>
+        
+        <div class="quran-player-buttons">
+            <button id="play-button" class="btn btn-primary">
+                {{#str}}play, block_quranplayer{{/str}}
+            </button>
+            <button id="pause-button" class="btn btn-secondary" style="display: none;">
+                {{#str}}pause, block_quranplayer{{/str}}
+            </button>
+            <button id="stop-button" class="btn btn-danger">
+                {{#str}}stop, block_quranplayer{{/str}}
+            </button>
+        </div>
+    </div>
+
+    <div id="quran-display" class="quran-display">
+        <div class="quran-header">
+            <h3>{{#str}}surah_title, block_quranplayer, { "surah": {{surah}}, "name": "{{surah_name}}" }{{/str}}</h3>
+            <div class="arabic-name">{{surah_arabic_name}}</div>
+        </div>
+        
+        <div id="arabic-text" class="arabic-text">{{{ qurantext }}}</div>
+        
+        <div class="quran-footer">
+            <a href="https://quran.com/{{surah}}" target="_blank" class="quran-source-link">
+                {{#str}}source_link, block_quranplayer{{/str}}
+            </a>
+        </div>
+    </div>
+</div>
+
+{{#js}}
+require(['block_quranplayer/player'], function(Player) {
+    new Player({
+        element: document.getElementById('quran-player-container'),
+        wwwroot: '{{wwwroot}}'
+    });
+});
+{{/js}}
+
+<style>
+.block_quranplayer {
+    padding: 15px;
+}
+
+.quran-player-controls {
+    margin-bottom: 20px;
+}
+
+.quran-player-buttons {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.quran-display {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.quran-header {
+    text-align: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.arabic-name {
+    font-size: 24px;
+    margin-top: 5px;
+}
+
+.arabic-text {
+    text-align: right;
+    font-size: 18px;
+    margin-bottom: 15px;
+    line-height: 2;
+}
+
+.quran-footer {
+    margin-top: 15px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
+
+.quran-source-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.quran-source-link:hover {
+    text-decoration: underline;
+}
+</style>
+{{/hascontent}} 

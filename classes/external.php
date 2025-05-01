@@ -15,35 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Privacy provider for the Quran Player block.
+ * External functions and service definitions for the Quran Player block
  *
  * @package    block_quranplayer
- * @copyright  2025 Maysara Mohamed
+ * @copyright  2024 Your Name <your.email@example.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace block_quranplayer\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
-use core_privacy\local\metadata\null_provider;
+$functions = [
+    'block_quranplayer_get_surah_text' => [
+        'classname' => 'block_quranplayer\external',
+        'methodname' => 'get_surah_text',
+        'description' => 'Get the text of a surah',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+];
 
-/**
- * Privacy provider for the Quran Player block.
- *
- * @package    block_quranplayer
- * @copyright  2025 Maysara Mohamed
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class provider implements null_provider {
-
-    /**
-     * Get the language string identifier with the component's language
-     * file to explain why this plugin stores no data.
-     *
-     * @return  string
-     */
-    public static function get_reason() : string {
-        return 'privacy:metadata';
-    }
-}
+$services = [
+    'Quran Player' => [
+        'functions' => [
+            'block_quranplayer_get_surah_text',
+        ],
+        'restrictedusers' => 0,
+        'enabled' => 1,
+    ],
+]; 

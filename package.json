@@ -1,0 +1,23 @@
+{
+  "name": "moodle-block_quranplayer",
+  "version": "1.1.0",
+  "description": "A Moodle block that displays Quran verses with audio playback",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "moodle",
+    "block",
+    "quran",
+    "islamic"
+  ],
+  "author": "Maysara Mohamed",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "grunt": "^1.5.3",
+    "grunt-contrib-jshint": "^3.1.0",
+    "grunt-contrib-uglify": "^5.2.0",
+    "grunt-contrib-watch": "^1.1.0"
+  }
+} 

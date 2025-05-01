@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Capability definitions for the Quran Player block.
+ * Capability definitions for the quranplayer block.
  *
  * @package    block_quranplayer
  * @copyright  2025 Maysara Mohamed
@@ -24,23 +24,27 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = [
-    'block/quranplayer:myaddinstance' => [
+$capabilities = array(
+    'block/quranplayer:myaddinstance' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => [
-            'user' => CAP_ALLOW,
-        ],
-    ],
-    'block/quranplayer:addinstance' => [
+        'archetypes' => array(
+            'user' => CAP_ALLOW
+        ),
+        'clonepermissionsfrom' => 'moodle/my:manageblocks'
+    ),
+
+    'block/quranplayer:addinstance' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => [
+        'archetypes' => array(
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW,
-        ],
-    ],
+            'manager' => CAP_ALLOW
+        ),
+        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+    ),
+
     'block/quranplayer:view' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_BLOCK,
@@ -49,4 +53,4 @@ $capabilities = [
             'guest' => CAP_ALLOW,
         ],
     ],
-];
+);

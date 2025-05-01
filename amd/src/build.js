@@ -1,4 +1,3 @@
-<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,17 +14,37 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for the Quran Player block.
+ * Build script for the quranplayer block.
  *
- * @package    block_quranplayer
+ * @module     block_quranplayer/build
  * @copyright  2025 Maysara Mohamed
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+module.exports = function(grunt) {
+    grunt.initConfig({
+        jshint: {
+            options: {
+                jshintrc: '.jshintrc'
+            },
+            all: ['amd/src/*.js']
+        },
+        uglify: {
+            all: {
+                files: {
+                    'amd/build/quranplayer.min.js': ['amd/src/quranplayer.js']
+                }
+            }
+        },
+        watch: {
+            files: 'amd/src/*.js',
+            tasks: ['jshint', 'uglify']
+        }
+    });
 
-$plugin->component = 'block_quranplayer';
-$plugin->version = 2025040900; // YYYYMMDDXX.
-$plugin->requires = 2020110900; // Minimum Moodle version.
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.1.0';
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
+    grunt.registerTask('default', ['jshint', 'uglify']);
+}; 

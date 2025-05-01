@@ -1,0 +1,21 @@
+<div class="quran-config-form">
+    <div class="form-group">
+        <label for="id_s_surah">{{# str }}surah, block_quranplayer{{/ str }}</label>
+        <input type="number" id="id_s_surah" name="s_surah" value="{{surah}}" min="1" max="114" class="form-control">
+        <small class="form-text text-muted">{{# str }}surah_help, block_quranplayer{{/ str }}</small>
+    </div>
+    
+    <div class="form-group">
+        <label for="id_s_ayah">{{# str }}ayah, block_quranplayer{{/ str }}</label>
+        <input type="number" id="id_s_ayah" name="s_ayah" value="{{ayah}}" min="1" class="form-control">
+        <small class="form-text text-muted">{{# str }}ayah_help, block_quranplayer{{/ str }}</small>
+    </div>
+    
+    <div class="form-group">
+        <label for="id_s_showtranslation">{{# str }}showtranslation, block_quranplayer{{/ str }}</label>
+        <select id="id_s_showtranslation" name="s_showtranslation" class="form-control">
+            <option value="1" {{#showtranslation}}selected{{/showtranslation}}>{{# str }}yes, core{{/ str }}</option>
+            <option value="0" {{^showtranslation}}selected{{/showtranslation}}>{{# str }}no, core{{/ str }}</option>
+        </select>
+    </div>
+</div> 

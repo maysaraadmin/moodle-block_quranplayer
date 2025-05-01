@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * External functions and service definitions for the Quran Player block.
+ * Quran Player block renderer
  *
  * @package    block_quranplayer
  * @copyright  2024 Your Name <your.email@example.com>
@@ -24,21 +24,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$functions = [
-    'block_quranplayer_get_surah_text' => [
-        'classname'     => 'block_quranplayer\external\get_surah_text',
-        'methodname'    => 'execute',
-        'description'   => 'Get the text of a specific surah',
-        'type'         => 'read',
-        'ajax'         => true,
-        'capabilities' => '',
-    ],
-];
-
-$services = [
-    'Quran Player' => [
-        'functions' => ['block_quranplayer_get_surah_text'],
-        'restrictedusers' => 0,
-        'enabled' => 1,
-    ],
-];
+class block_quranplayer_renderer extends plugin_renderer_base {
+    
+    /**
+     * Render the block content
+     *
+     * @param stdClass $data Template data
+     * @return string HTML output
+     */
+    public function render_content($data) {
+        return $this->render_from_template('block_quranplayer/content', $data);
+    }
+} 

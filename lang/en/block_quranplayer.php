@@ -18,31 +18,35 @@
  * Language strings for the Quran Player block.
  *
  * @package    block_quranplayer
- * @copyright  2025 Maysara Mohamed
+ * @copyright  2024 Your Name <your.email@example.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 $string['pluginname'] = 'Quran Player';
-$string['quranplayer'] = 'Quran Player';
-$string['privacy:metadata'] = 'The Quran Player block does not store any personal data. It only provides an interface to play Quranic audio and display Quranic text.';
 $string['quranplayer:addinstance'] = 'Add a new Quran Player block';
-$string['quranplayer:myaddinstance'] = 'Add a new Quran Player block to My Moodle';
+$string['quranplayer:myaddinstance'] = 'Add a new Quran Player block to Dashboard';
 $string['quranplayer:view'] = 'View the Quran Player block';
-$string['selectfile'] = 'Select a chapter to play:';
-$string['qurantext'] = 'Quran Text';
-$string['noaudiofiles'] = 'No audio files found.';
-$string['nodirectory'] = 'MP3 directory not found.';
-$string['noqurantext'] = 'Quran text file not found.';
-$string['loading'] = 'Loading Quran text...';
-$string['errorloading'] = 'Failed to load Quran text.';
-$string['browsererror'] = 'Your browser does not support the audio element.';
-$string['audioerror'] = 'Failed to load audio.';
-$string['audiofilenotfound'] = 'Audio file not found for this chapter.';
-$string['audiofilecheckfailed'] = 'Failed to check audio file.';
-$string['surah'] = 'Surah';
-$string['ayah'] = 'Ayah';
-$string['viewfullsurah'] = 'View full surah';
-$string['viewayah'] = 'View ayah';
-$string['nopermissions'] = 'You do not have permission to view the Quran Player.';
+
+// Block strings
+$string['selectsurah'] = 'Select Surah';
+$string['play'] = 'Play';
+$string['pause'] = 'Pause';
+$string['stop'] = 'Stop';
+$string['configureblock'] = 'Please configure the Quran block to display a verse.';
+$string['surah_ayah'] = 'Surah {$a->surah}, Ayah {$a->ayah}';
+$string['surah_title'] = 'Surah {$a->surah}: {$a->name}';
+$string['errortext'] = 'Error loading Quran text';
+$string['browser_not_support'] = 'Your browser does not support the audio element.';
+$string['source_link'] = 'View on Quran.com';
+$string['blocksettings'] = 'Block settings';
+$string['blocktitle'] = 'Quran Verse';
+$string['surah'] = 'Surah Number';
+$string['ayah'] = 'Ayah Number';
+$string['showtranslation'] = 'Show Translation';
+$string['quranapierror'] = 'Error connecting to Quran API: {$a}';
+$string['jsondecodeerror'] = 'Error decoding JSON response: {$a}';
+$string['invalidapiresponse'] = 'Invalid API response structure';
+$string['surah_help'] = 'Enter a surah number between 1 and 114';
+$string['ayah_help'] = 'Enter an ayah number';
+$string['invalidsurah'] = 'Invalid surah number: {$a}';
+$string['errorgettingtext'] = 'Error getting Quran text';
